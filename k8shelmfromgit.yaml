@@ -1,12 +1,12 @@
 pipeline:
   name: k8s-helm-from-git
-  identifier: k8s-helm-from-git
+  identifier: k8shelm
   projectIdentifier: Labs
   orgIdentifier: Customer_Experience
   tags: {}
   stages:
     - stage:
-        name: k8shelm
+        name: k8shelm-1
         identifier: k8shelm
         description: ""
         type: Deployment
