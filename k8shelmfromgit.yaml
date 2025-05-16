@@ -1,6 +1,6 @@
 pipeline:
   name: k8s-helm-from-git
-  identifier: k8shelm
+  identifier: k8s-helm-from-git
   projectIdentifier: Labs
   orgIdentifier: Customer_Experience
   tags: {}
