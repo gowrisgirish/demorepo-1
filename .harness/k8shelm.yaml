@@ -18,6 +18,12 @@ pipeline:
               serviceDefinition:
                 type: Kubernetes
                 spec:
+                  manifests:
+                    - manifest:
+                        identifier: k8shelm
+                        type: HelmChart
+                        spec:
+                          chartVersion: <+input>
                   variables:
                     - name: onlySecretDeployment
                       type: String
