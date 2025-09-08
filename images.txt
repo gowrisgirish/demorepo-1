@@ -1,1 +1,1 @@
-index.docker.io/library/nginx:stable-perl-testing
+index.docker.io/library/nginx:stable-perl-testing-123
