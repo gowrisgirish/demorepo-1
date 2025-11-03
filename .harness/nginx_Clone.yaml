@@ -1,0 +1,64 @@
+service:
+  orgIdentifier: Customer_Experience
+  projectIdentifier: Labs
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: nginx
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: githubindelegate
+                  gitFetchType: Branch
+                  paths:
+                    - default-k8s-manifests/Manifests/deployment.yaml
+                  repoName: harness-docs
+                  branch: main
+              valuesPaths:
+                - default-k8s-manifests/Manifests/values.yaml
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+      artifacts:
+        primary:
+          sources:
+            - spec:
+                connectorRef: podinfodockerconnectorreadonly
+                imagePath: library/nginx
+                tag: <+input>
+                digest: ""
+              identifier: nginximage
+              type: DockerRegistry
+            - spec:
+                connectorRef: AWS_Provider
+                imagePath: test
+                tag: <+input>
+                digest: ""
+                region: us-east-2
+              identifier: ECR
+              type: Ecr
+            - spec:
+                connectorRef: <+env.variables.awsAccountName>
+                imagePath: test
+                tag: <+input>
+                digest: ""
+                region: us-east-2
+              identifier: ECRtesting
+              type: Ecr
+          primaryArtifactRef: nginximage
+      hooks:
+        - postHook:
+            identifier: servicehook
+            storeType: Inline
+            actions:
+              - FetchFiles
+            store:
+              content: sleep 1000
+  tags:
+    nginx-service: ""
+  gitOpsEnabled: false
+  identifier: nginx_Clone
+  name: nginx - Clone
