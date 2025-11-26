@@ -1,0 +1,73 @@
+pipeline:
+  name: stepgrouptest
+  identifier: stepgrouptest
+  projectIdentifier: Labs
+  orgIdentifier: Customer_Experience
+  tags: {}
+  stages:
+    - stage:
+        name: stepgroup
+        identifier: stepgroup
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - stepGroup:
+                  name: stepgroup
+                  identifier: stepgroup
+                  steps:
+                    - step:
+                        type: GitClone
+                        name: GitClone_1
+                        identifier: GitClone_1
+                        spec:
+                          connectorRef: org.githubthroughdelegate
+                          repoName: demo-repo
+                          build:
+                            type: branch
+                            spec:
+                              branch: main
+                    - step:
+                        type: Run
+                        name: Run_1
+                        identifier: Run_1
+                        spec:
+                          connectorRef: podinfodockerconnectorpublish
+                          image: nginx:latest
+                          shell: Sh
+                          command: |-
+                            echo "Install JQ and set environment variables"
+                            curl -L -o /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.6/jq-linux64 \
+                                && chmod +x /usr/local/bin/jq
+                                
+                            #source jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json
+                            eval "$(jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json)"
+
+
+                            env
+                          envVariables:
+                            test: value1
+                            test2: value2
+                    - step:
+                        type: Run
+                        name: Run_2
+                        identifier: Run_2
+                        spec:
+                          connectorRef: podinfodockerconnectorpublish
+                          image: nginx:latest
+                          shell: Sh
+                          command: env
+                  stepGroupInfra:
+                    type: KubernetesDirect
+                    spec:
+                      connectorRef: k8sdemoconnector
+            rollbackSteps: []
+          serviceDependencies: []
+        tags: {}
+  variables:
+    - name: pipelinevariable
+      type: String
+      description: ""
+      required: false
+      value: <+input>
