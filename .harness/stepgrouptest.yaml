@@ -48,6 +48,9 @@ pipeline:
 
                                 env
 
+                                apt update
+                                apt install procps -y
+
                                 sleep 10000
                               envVariables:
                                 test: value1
