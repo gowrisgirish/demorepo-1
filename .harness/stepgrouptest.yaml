@@ -35,7 +35,7 @@ pipeline:
                             identifier: Run_1
                             spec:
                               connectorRef: podinfodockerconnectorpublish
-                              image: nginx:latest
+                              image: gowrisgirish/payment-service:52
                               shell: Sh
                               command: |-
                                 echo "Install JQ and set environment variables"
@@ -47,7 +47,7 @@ pipeline:
 
                                 #export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
                                 #export output=$(jq -r '.[] | "\(.name): \(.value)\\n"' /harness/demo-repo/env.json)
-                                export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
+                                #export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
                                 env
 
                                 apt update
