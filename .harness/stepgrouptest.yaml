@@ -45,16 +45,21 @@ pipeline:
                                 #source jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json
                                 eval "$(jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json)"
 
+                                export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
 
                                 env
 
                                 apt update
                                 apt install procps -y
 
-                                sleep 10000
+                                #sleep 10000
                               envVariables:
                                 test: value1
                                 test2: value2
+                              outputVariables:
+                                - name: ENV_VARIABLE
+                                  type: String
+                                  value: output
                         - step:
                             type: Run
                             name: Run_2
@@ -66,15 +71,6 @@ pipeline:
                               envVariables:
                                 environment_variable_1: value1
                                 environment_variable_2: value2
-                        - step:
-                            type: Run
-                            name: Run_3
-                            identifier: Run_3
-                            spec:
-                              connectorRef: podinfodockerconnectorpublish
-                              image: nginx:latest
-                              shell: Sh
-                              envVariables: <+input>
                   stepGroupInfra:
                     type: KubernetesDirect
                     spec:
