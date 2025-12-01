@@ -72,29 +72,10 @@ pipeline:
                               envVariables: <+input>
                             when:
                               stageStatus: Success
-                              condition: "false"
                   stepGroupInfra:
                     type: KubernetesDirect
                     spec:
                       connectorRef: k8sdemoconnector
-              - stepGroup:
-                  name: run-tests
-                  identifier: runtests
-                  steps:
-                    - step:
-                        type: Run
-                        name: Run_4
-                        identifier: Run_4
-                        spec:
-                          connectorRef: podinfodockerconnectorpublish
-                          image: nginx:latest
-                          shell: Sh
-                          envVariables: <+pipeline.stages.stepgroup.spec.execution.steps.stepgroup.steps.Run_1.output.outputVariables.ENV_VARIABLE>
-                  stepGroupInfra:
-                    type: KubernetesDirect
-                    spec:
-                      connectorRef: k8sdemoconnector
-                      namespace: gowri
             rollbackSteps: []
           serviceDependencies: []
         tags: {}
