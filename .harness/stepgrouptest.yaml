@@ -90,6 +90,7 @@ pipeline:
                           connectorRef: podinfodockerconnectorpublish
                           image: nginx:latest
                           shell: Sh
+                          envVariables: <+pipeline.stages.stepgroup.spec.execution.steps.stepgroup.steps.Run_1.output.outputVariables.ENV_VARIABLE>
                   stepGroupInfra:
                     type: KubernetesDirect
                     spec:
