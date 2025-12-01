@@ -35,7 +35,7 @@ pipeline:
                             identifier: Run_1
                             spec:
                               connectorRef: podinfodockerconnectorpublish
-                              image: gowrisgirish/payment-service:52
+                              image: nginx:latest
                               shell: Sh
                               command: |-
                                 echo "Install JQ and set environment variables"
@@ -47,13 +47,13 @@ pipeline:
 
                                 #export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
                                 #export output=$(jq -r '.[] | "\(.name): \(.value)\\n"' /harness/demo-repo/env.json)
-                                #export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
+                                export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
                                 env
 
                                 apt update
                                 apt install procps -y
 
-                                #sleep 10000
+                                sleep 10000
                               envVariables:
                                 test: value1
                                 test2: value2
