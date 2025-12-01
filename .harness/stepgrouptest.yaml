@@ -45,7 +45,8 @@ pipeline:
                                 #source jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json
                                 eval "$(jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json)"
 
-                                export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
+                                #export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
+                                export output=$(jq -r '.[] | "\(.name): \(.value)\\n"' /harness/demo-repo/env.json)
 
                                 env
 
