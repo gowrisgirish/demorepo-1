@@ -79,6 +79,23 @@ pipeline:
                     type: KubernetesDirect
                     spec:
                       connectorRef: k8sdemoconnector
+              - stepGroup:
+                  name: run-tests
+                  identifier: runtests
+                  steps:
+                    - step:
+                        type: Run
+                        name: Run_4
+                        identifier: Run_4
+                        spec:
+                          connectorRef: podinfodockerconnectorpublish
+                          image: nginx:latest
+                          shell: Sh
+                  stepGroupInfra:
+                    type: KubernetesDirect
+                    spec:
+                      connectorRef: k8sdemoconnector
+                      namespace: gowri
             rollbackSteps: []
           serviceDependencies: []
         tags: {}
