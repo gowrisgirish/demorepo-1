@@ -28,50 +28,38 @@ pipeline:
                             type: branch
                             spec:
                               branch: main
-                    - parallel:
-                        - step:
-                            type: Run
-                            name: Run_1
-                            identifier: Run_1
-                            spec:
-                              connectorRef: podinfodockerconnectorpublish
-                              image: nginx:latest
-                              shell: Sh
-                              command: |-
-                                echo "Install JQ and set environment variables"
-                                curl -L -o /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.6/jq-linux64 \
-                                    && chmod +x /usr/local/bin/jq
-                                    
-                                #source jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json
-                                eval "$(jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json)"
+                    - step:
+                        type: Run
+                        name: Run_1
+                        identifier: Run_1
+                        spec:
+                          connectorRef: podinfodockerconnectorpublish
+                          image: nginx:latest
+                          shell: Sh
+                          command: |-
+                            echo "Install JQ and set environment variables"
+                            curl -L -o /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.6/jq-linux64 \
+                                && chmod +x /usr/local/bin/jq
+                                
+                            #source jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json
+                            eval "$(jq -r '.[] | "export \(.name)=\(.value)"' /harness/demo-repo/env.json)"
 
-                                #export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
-                                #export output=$(jq -r '.[] | "\(.name): \(.value)\\n"' /harness/demo-repo/env.json)
-                                export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
-                                env
+                            #export output=$(jq -r '.[] | "\(.name): \(.value)"' /harness/demo-repo/env.json)
+                            #export output=$(jq -r '.[] | "\(.name): \(.value)\\n"' /harness/demo-repo/env.json)
+                            export output=$(jq -r '.[] | "  \(.name): \(.value)"' /harness/demo-repo/env.json)
+                            env
 
-                                apt update
-                                apt install procps -y
+                            apt update
+                            apt install procps -y
 
-                                sleep 10000
-                              envVariables:
-                                test: value1
-                                test2: value2
-                              outputVariables:
-                                - name: ENV_VARIABLE
-                                  type: String
-                                  value: output
-                        - step:
-                            type: Run
-                            name: Run_2
-                            identifier: Run_2
-                            spec:
-                              connectorRef: podinfodockerconnectorpublish
-                              image: nginx:latest
-                              shell: Sh
-                              envVariables: <+input>
-                            when:
-                              stageStatus: Success
+                            sleep 10000
+                          envVariables:
+                            test: value1
+                            test2: value2
+                          outputVariables:
+                            - name: ENV_VARIABLE
+                              type: String
+                              value: output
                   stepGroupInfra:
                     type: KubernetesDirect
                     spec:
