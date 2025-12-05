@@ -67,6 +67,36 @@ pipeline:
             rollbackSteps: []
           serviceDependencies: []
         tags: {}
+    - stage:
+        name: run-tests
+        identifier: runtests
+        description: ""
+        type: Pipeline
+        spec:
+          org: Customer_Experience
+          pipeline: stepgrouptest_Clone
+          project: Labs
+          inputs:
+            identifier: stepgrouptest_Clone
+            stages:
+              - stage:
+                  identifier: stepgroup
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - stepGroup:
+                            identifier: stepgroup
+                            steps:
+                              - step:
+                                  identifier: Run_2
+                                  type: Run
+                                  spec:
+                                    envVariables: <+input>
+            variables:
+              - name: pipelinevariable
+                type: String
+                value: <+input>
   variables:
     - name: pipelinevariable
       type: String
